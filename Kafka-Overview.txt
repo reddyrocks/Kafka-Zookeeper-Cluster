@@ -1,0 +1,86 @@
+Kafka:
+Distributed Streaming Platform
+    publish and subscribe to the stream of records
+    stores the stream of records without fault tolearcance
+    allows the process of records when they occur
+    
+Good for ?
+Buildind real time streaming data pipelines and transform or react to the sytem
+
+
+Core concepts:
+run  as cluster
+stores recors in means of topics
+each record consists of key, value,timestamp
+
+API's:
+
+producer: publish the stream of records into topics
+consumer: subscribe to the topics to process the records  that are produced to them
+straming API: stream processor that converts input stream to output stream
+connector API: Building a resuable prod/cons that connect to kafka streams/topics to exisiting apps or ddata sys
+
+
+Communication b/w consumers and producer is through TCP protocol
+
+
+Topics and Logs:    
+
+Abastraction of kafka provides records into topics
+    Each topic is divided into partitions into which records are feeded
+    for exmaple
+    x topic divdied into 3 partitions
+    part 0
+    part 1
+    part 2
+    lets say a stream of 10 records produced to a topic
+    1st five goes to part 0
+    next 3 goes to part 1
+    final 2 goes to part 2
+    which looks like
+    part 0 : 1 2 3 4 5
+    part 1: 1 2 3
+    part 2: 1 2
+
+    A consumer can suncribe to a topic X and will use an offset(sequential ID i.e., 123) of one of the partitions
+
+
+Distributed
+
+    In a givem cluster of 3 nodes
+    each server in a cluster handles the read and write requests
+    partitioned logs of a topic are replicated accross the servers 
+    out of 3 
+    1 acts a leader which handles the read and write requests and other 2 acts followers which simply replicates the partioned logs
+    if leader failes then 1 out of 2 followers will be as leader and faile leader becomes as followers
+    each server acts as leader for its own partion so that the load balancing can be done properly
+
+
+Producer
+
+The producer is responsible to choose which partiotion to send the record.
+round robin for load balancing or can choose the semantic verison
+
+
+consumer
+
+Consumer label with the consumer group name 
+
+The way consumption is implemented in Kafka is by dividing up the partitions in the log over the consumer 
+instances so that each instance is the exclusive consumer of a "fair share" of partitions at any point in time. 
+This process of maintaining membership in the group is handled by the Kafka protocol dynamically. 
+If new instances join the group they will take over some partitions from other members of the group; 
+if an instance dies, its partitions will be distributed to the remaining instances.
+
+Kafka only provides a total order over records within a partition, not between different partitions in a topic. 
+Per-partition ordering combined with the ability to partition data by key is sufficient for most applications. However,
+if you require a total order over records this can be achieved with a topic that has only one partition, 
+though this will mean only one consumer process per consumer group.
+
+
+
+
+
+    
+
+
